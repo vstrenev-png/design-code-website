@@ -263,16 +263,15 @@ img{display:block;max-width:100%}
 .space-preview img.active{opacity:1}
 
 /* ---------- projects ---------- */
-.projects{display:grid;grid-template-columns:repeat(12,1fr);gap:7vh 3vw}
-.project{position:relative;display:block}
-.project:nth-child(1){grid-column:1/6}
-.project:nth-child(2){grid-column:8/13;margin-top:14vh}
-.project:nth-child(3){grid-column:2/7;margin-top:4vh}
-.project:nth-child(4){grid-column:8/12;margin-top:-6vh}
-.project:nth-child(5){grid-column:4/10;margin-top:6vh}
+.projects{display:grid;grid-template-columns:repeat(12,1fr);gap:0 3vw}
+.project{position:relative;display:block;margin-bottom:14vh}
+.project:nth-child(odd){grid-column:1/8}
+.project:nth-child(even){grid-column:9/13;padding-top:22vh;margin-bottom:0}
+.project:nth-child(odd) .project__frame{aspect-ratio:16/10}
+.project:nth-child(even) .project__frame{aspect-ratio:3/4}
 .project__frame{overflow:hidden;position:relative}
 .project__frame img{
-  width:100%;height:auto;
+  width:100%;height:100%;object-fit:cover;
   transform:scale(1.12);
   transition:transform 1.4s var(--ease),filter 1.4s var(--ease);
   filter:brightness(.82);
@@ -286,10 +285,10 @@ img{display:block;max-width:100%}
   background:rgba(10,10,10,.45);opacity:0;transition:opacity .5s;
 }
 .project:hover .project__frame::after{opacity:1}
-.project__info{display:flex;justify-content:space-between;align-items:baseline;margin-top:1.1rem}
+.project__info{display:flex;justify-content:space-between;align-items:baseline;gap:2rem;margin-top:1.6rem}
 .project__name{font-family:var(--serif);font-size:1.6rem;font-weight:400}
 .project__num{
-  position:absolute;top:-1.6rem;left:-.2rem;
+  position:static;flex-shrink:0;
   font-size:.68rem;letter-spacing:.3em;color:var(--accent);
 }
 .project__meta{
@@ -419,7 +418,8 @@ img{display:block;max-width:100%}
 @media(max-width:960px){
   .nav__links{display:none}
   .burger{display:flex}
-  .projects .project{grid-column:1/13!important;margin-top:0!important}
+  .projects .project{grid-column:1/13!important;padding-top:0!important;margin-bottom:10vh!important}
+  .projects .project__frame{aspect-ratio:16/10!important}
   .space{grid-template-columns:3.4rem 1fr 2rem}
   .space__desc{display:none}
   .space-preview{display:none}
@@ -550,9 +550,8 @@ img{display:block;max-width:100%}
     </div>
     <div class="projects">
       <a class="project reveal" data-hover href="project-vitosha.html">
-        <span class="project__num">/ 001</span>
         <div class="project__frame"><img src="assets/project-living.jpg" alt="Апартамент Витоша — всекидневна" data-parallax="0.06"></div>
-        <div class="project__info"><h3 class="project__name">Апартамент „Витоша“</h3></div>
+        <div class="project__info"><h3 class="project__name">Апартамент „Витоша“</h3><span class="project__num">/ 001</span></div>
         <dl class="project__meta">
           <div><dt>Тип</dt><dd>Жилище</dd></div>
           <div><dt>Локация</dt><dd>София</dd></div>
@@ -560,9 +559,8 @@ img{display:block;max-width:100%}
         </dl>
       </a>
       <a class="project reveal" data-d="1" data-hover href="project-gradina.html">
-        <span class="project__num">/ 002</span>
         <div class="project__frame"><img src="assets/project-kitchen.jpg" alt="Кухня Градина" data-parallax="0.06"></div>
-        <div class="project__info"><h3 class="project__name">Кухня „Градина“</h3></div>
+        <div class="project__info"><h3 class="project__name">Кухня „Градина“</h3><span class="project__num">/ 002</span></div>
         <dl class="project__meta">
           <div><dt>Тип</dt><dd>Жилище</dd></div>
           <div><dt>Локация</dt><dd>София</dd></div>
@@ -570,9 +568,8 @@ img{display:block;max-width:100%}
         </dl>
       </a>
       <a class="project reveal" data-hover href="project-merak.html">
-        <span class="project__num">/ 003</span>
         <div class="project__frame"><img src="assets/project-restaurant.jpg" alt="Ресторант Мерак" data-parallax="0.06"></div>
-        <div class="project__info"><h3 class="project__name">Ресторант „Мерак“</h3></div>
+        <div class="project__info"><h3 class="project__name">Ресторант „Мерак“</h3><span class="project__num">/ 003</span></div>
         <dl class="project__meta">
           <div><dt>Тип</dt><dd>Хотелиерство</dd></div>
           <div><dt>Локация</dt><dd>Пловдив</dd></div>
@@ -580,9 +577,8 @@ img{display:block;max-width:100%}
         </dl>
       </a>
       <a class="project reveal" data-d="1" data-hover href="project-tishina.html">
-        <span class="project__num">/ 004</span>
         <div class="project__frame"><img src="assets/project-bedroom.jpg" alt="Спалня Тишина" data-parallax="0.06"></div>
-        <div class="project__info"><h3 class="project__name">Спалня „Тишина“</h3></div>
+        <div class="project__info"><h3 class="project__name">Спалня „Тишина“</h3><span class="project__num">/ 004</span></div>
         <dl class="project__meta">
           <div><dt>Тип</dt><dd>Жилище</dd></div>
           <div><dt>Локация</dt><dd>Варна</dd></div>
@@ -590,9 +586,8 @@ img{display:block;max-width:100%}
         </dl>
       </a>
       <a class="project reveal" data-hover href="project-ritual.html">
-        <span class="project__num">/ 005</span>
         <div class="project__frame"><img src="assets/project-bathroom.jpg" alt="Баня Ритуал" data-parallax="0.06"></div>
-        <div class="project__info"><h3 class="project__name">Баня „Ритуал“</h3></div>
+        <div class="project__info"><h3 class="project__name">Баня „Ритуал“</h3><span class="project__num">/ 005</span></div>
         <dl class="project__meta">
           <div><dt>Тип</dt><dd>Спа &amp; Уелнес</dd></div>
           <div><dt>Локация</dt><dd>София</dd></div>
