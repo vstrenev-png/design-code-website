@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Започнете разговор — Design-Code</title>
+<meta name="description" content="Разкажете ни за вашия имот — заявете консултация или изпратете запитване към студио Design-Code.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="project.css">
+<style>
+/* ---------- form page specifics ---------- */
+.c-hero{padding:20vh 4vw 6vh;border-bottom:1px solid var(--line)}
+.c-hero__index{font-size:.7rem;letter-spacing:.34em;color:var(--accent);margin-bottom:2.4vh}
+.c-hero__title{font-family:var(--serif);font-weight:300;font-size:clamp(2.8rem,7.5vw,7.5rem);
+  line-height:1;letter-spacing:-.01em;overflow:hidden}
+.c-hero__title span{display:block;transform:translate3d(0,115%,0);transition:transform 1.6s var(--ease) .2s}
+.c-hero__title em{font-style:italic;color:var(--accent)}
+.loaded .c-hero__title span{transform:translate3d(0,0,0)}
+.c-hero__sub{margin-top:3.5vh;max-width:34rem;color:var(--muted);font-size:.95rem;line-height:1.8;
+  opacity:0;transition:opacity 1.2s ease .9s}
+.loaded .c-hero__sub{opacity:1}
+
+.c-form{padding:12vh 4vw 14vh;max-width:1100px;margin:0 auto}
+.f-section{margin-bottom:9vh}
+.f-section__head{display:flex;align-items:baseline;gap:1.6rem;margin-bottom:4vh}
+.f-section__num{font-size:.66rem;letter-spacing:.3em;color:var(--accent)}
+.f-section__title{font-family:var(--serif);font-weight:300;font-size:clamp(1.5rem,2.6vw,2.3rem)}
+.f-section__rule{flex:1;height:1px;background:var(--line)}
+
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem 3vw}
+.f-field{display:flex;flex-direction:column;gap:.9rem}
+.f-field--full{grid-column:1/-1}
+.f-field label{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.f-field label i{font-style:normal;color:var(--accent)}
+.f-field input,.f-field select,.f-field textarea{
+  background:transparent;border:0;border-bottom:1px solid var(--line);
+  padding:1.1rem 0;color:var(--text);
+  font-family:var(--sans);font-weight:300;font-size:1rem;letter-spacing:.03em;
+  transition:border-color .4s;border-radius:0;appearance:none;-webkit-appearance:none;
+}
+.f-field textarea{resize:vertical;min-height:9rem;line-height:1.8}
+.f-field input:focus,.f-field select:focus,.f-field textarea:focus{
+  outline:none;border-color:var(--accent);
+}
+.f-field input::placeholder,.f-field textarea::placeholder{color:#4a4a4a}
+.f-field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%238dc63f' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .2rem center;padding-right:2rem;
+}
+.f-field select:invalid{color:#4a4a4a}
+.f-field select option{background:var(--panel);color:var(--text)}
+.f-field .hint{font-size:.66rem;letter-spacing:.12em;color:#5a5a5a}
+.f-field.error input,.f-field.error select,.f-field.error textarea{border-color:#c6533f}
+.f-field .err-msg{display:none;font-size:.64rem;letter-spacing:.14em;color:#c6533f}
+.f-field.error .err-msg{display:block}
+
+/* size slider */
+.f-size{display:flex;align-items:center;gap:2rem}
+.f-size output{font-family:var(--serif);font-size:1.9rem;color:var(--accent);min-width:8rem}
+.f-size input[type=range]{flex:1;accent-color:var(--accent);border:0;padding:0;height:2px}
+
+/* file upload */
+.f-drop{
+  border:1px dashed #3a3a3a;padding:4.4rem 2rem;text-align:center;
+  transition:border-color .4s,background .4s;position:relative;
+}
+.f-drop.drag{border-color:var(--accent);background:rgba(141,198,63,.05)}
+.f-drop input{position:absolute;inset:0;opacity:0;cursor:none;width:100%;height:100%}
+.f-drop__icon{font-family:var(--serif);font-size:2.4rem;color:var(--accent);line-height:1}
+.f-drop__text{margin-top:1.4rem;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.f-drop__text b{color:var(--text);font-weight:400;border-bottom:1px solid var(--accent)}
+.f-drop__hint{margin-top:.9rem;font-size:.64rem;letter-spacing:.12em;color:#5a5a5a}
+.f-files{margin-top:1.6rem;display:flex;flex-direction:column;gap:.8rem}
+.f-file{display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 1.4rem;background:var(--panel);border:1px solid var(--line);
+  font-size:.74rem;letter-spacing:.08em}
+.f-file span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80%}
+.f-file button{background:none;border:0;color:var(--muted);font-size:.66rem;
+  letter-spacing:.24em;text-transform:uppercase;transition:color .3s}
+.f-file button:hover{color:#c6533f}
+
+/* actions */
+.c-actions{display:grid;grid-template-columns:1fr 1fr;gap:3vw;margin-top:10vh}
+.c-action{
+  border:1px solid var(--line);padding:3.6rem 3rem;display:flex;flex-direction:column;gap:1.6rem;
+  text-align:left;background:none;color:var(--text);font-family:var(--sans);
+  transition:border-color .4s,background .4s;position:relative;overflow:hidden;
+}
+.c-action small{font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+.c-action strong{font-family:var(--serif);font-weight:300;font-size:clamp(1.4rem,2.2vw,2rem);line-height:1.25}
+.c-action .price{font-family:var(--serif);font-size:2rem;color:var(--accent)}
+.c-action .go{display:inline-flex;align-items:center;gap:.9rem;font-size:.66rem;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--text);margin-top:auto}
+.c-action .go .arr{color:var(--accent);transition:transform .5s var(--ease)}
+.c-action:hover .go .arr{transform:translateX(10px)}
+.c-action--stripe:hover{border-color:var(--accent);background:rgba(141,198,63,.06)}
+.c-action--send:hover{border-color:var(--muted);background:var(--panel)}
+.c-note{margin-top:3.4rem;text-align:center;font-size:.68rem;letter-spacing:.16em;color:#5a5a5a;line-height:1.9}
+
+/* success */
+.c-success{display:none;text-align:center;padding:14vh 4vw;max-width:760px;margin:0 auto}
+.c-success.show{display:block}
+.c-success h2{font-family:var(--serif);font-weight:300;font-size:clamp(2.2rem,5vw,4.4rem);line-height:1.1}
+.c-success h2 em{font-style:italic;color:var(--accent)}
+.c-success p{margin-top:3vh;color:var(--muted);line-height:1.9;font-size:.95rem}
+.c-success a{display:inline-block;margin-top:5vh;font-size:.68rem;letter-spacing:.3em;
+  text-transform:uppercase;border-bottom:1px solid var(--accent);padding-bottom:.6rem;transition:color .3s}
+.c-success a:hover{color:var(--accent)}
+
+@media(max-width:860px){
+  .f-grid{grid-template-columns:1fr}
+  .c-actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="cursor"></div>
+
+<header class="nav">
+  <a href="index.html" class="nav__brand" data-hover>
+    <img src="assets/logo.png" alt="Design-Code лого">
+    <span class="nav__name">Design<em>—</em>Code</span>
+  </a>
+  <a class="nav__back" href="index.html#contact" data-hover><span class="arr">&#8592;</span>Обратно към сайта</a>
+</header>
+
+<main>
+  <section class="c-hero">
+    <p class="c-hero__index">Запитване</p>
+    <h1 class="c-hero__title"><span>Разкажете ни за <em>вашия имот</em></span></h1>
+    <p class="c-hero__sub">Няколко въпроса, които ни помагат да разберем пространството, нуждите и мечтите ви — преди още първата ни среща.</p>
+  </section>
+
+  <form class="c-form" id="inquiry" novalidate>
+    <!-- 01 Лични данни -->
+    <div class="f-section">
+      <div class="f-section__head">
+        <span class="f-section__num">01</span>
+        <h2 class="f-section__title">Вашите данни</h2>
+        <span class="f-section__rule"></span>
+      </div>
+      <div class="f-grid">
+        <div class="f-field">
+          <label for="names">Две имена <i>*</i></label>
+          <input type="text" id="names" name="names" required placeholder="Иван Петров">
+          <span class="err-msg">Моля, въведете двете си имена.</span>
+        </div>
+        <div class="f-field">
+          <label for="email">Имейл <i>*</i></label>
+          <input type="email" id="email" name="email" required placeholder="ivan@example.com">
+          <span class="err-msg">Моля, въведете валиден имейл адрес.</span>
+        </div>
+        <div class="f-field">
+          <label for="phone">Телефон <i>*</i></label>
+          <input type="tel" id="phone" name="phone" required placeholder="+359 88 123 4567">
+          <span class="err-msg">Моля, въведете телефонен номер.</span>
+        </div>
+        <div class="f-field">
+          <label for="source">Как разбрахте за нас?</label>
+          <select id="source" name="source">
+            <option value="" selected disabled>Изберете…</option>
+            <option>Препоръка от приятел</option>
+            <option>Google търсене</option>
+            <option>Instagram</option>
+            <option>Facebook</option>
+            <option>Публикация / медия</option>
+            <option>Друго</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Имотът -->
+    <div class="f-section">
+      <div class="f-section__head">
+        <span class="f-section__num">02</span>
+        <h2 class="f-section__title">Имотът</h2>
+        <span class="f-section__rule"></span>
+      </div>
+      <div class="f-grid">
+        <div class="f-field">
+          <label for="country">Държава <i>*</i></label>
+          <input type="text" id="country" name="country" required placeholder="България">
+          <span class="err-msg">Моля, въведете държава.</span>
+        </div>
+        <div class="f-field">
+          <label for="city">Град <i>*</i></label>
+          <input type="text" id="city" name="city" required placeholder="София">
+          <span class="err-msg">Моля, въведете град.</span>
+        </div>
+        <div class="f-field">
+          <label for="ptype">Тип имот <i>*</i></label>
+          <select id="ptype" name="ptype" required>
+            <option value="" selected disabled>Изберете…</option>
+            <option>Апартамент</option>
+            <option>Къща</option>
+            <option>Мезонет</option>
+            <option>Офис</option>
+            <option>Ресторант / кафене</option>
+            <option>Магазин / шоурум</option>
+            <option>Хотел</option>
+            <option>Друго</option>
+          </select>
+          <span class="err-msg">Моля, изберете тип имот.</span>
+        </div>
+        <div class="f-field">
+          <label for="size">Размер на имота (м²)</label>
+          <div class="f-size">
+            <input type="range" id="sizeRange" min="20" max="1000" step="5" value="120" data-hover>
+            <output id="sizeOut">120 м²</output>
+          </div>
+          <input type="hidden" id="size" name="size" value="120 м²">
+        </div>
+        <div class="f-field f-field--full">
+          <label for="story">Разкажете ни за имота — и как си представяте да се чувствате в него <i>*</i></label>
+          <textarea id="story" name="story" required placeholder="Какво обичате, какво ви липсва, каква атмосфера мечтаете да създадем…"></textarea>
+          <span class="hint">Колкото повече детайли споделите, толкова по-точно ще подготвим първата ни среща.</span>
+          <span class="err-msg">Моля, разкажете ни поне няколко думи за имота.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Файлове -->
+    <div class="f-section">
+      <div class="f-section__head">
+        <span class="f-section__num">03</span>
+        <h2 class="f-section__title">Снимки или чертежи</h2>
+        <span class="f-section__rule"></span>
+      </div>
+      <div class="f-drop" id="drop" data-hover>
+        <input type="file" id="files" name="files" multiple accept="image/*,.pdf,.dwg,.dxf,.skp">
+        <div class="f-drop__icon">+</div>
+        <p class="f-drop__text">Плъзнете файлове тук или <b>изберете от устройството</b></p>
+        <p class="f-drop__hint">Снимки, PDF планове, чертежи — до 10 файла</p>
+      </div>
+      <div class="f-files" id="fileList"></div>
+    </div>
+
+    <!-- Действия -->
+    <div class="c-actions">
+      <button type="button" class="c-action c-action--stripe" id="btnStripe" data-hover>
+        <strong>Резервирайте консултация в нашия календар и започваме веднага</strong>
+        <span class="price">200 €</span>
+        <span class="go">Към сигурно плащане<span class="arr">&#8594;</span></span>
+      </button>
+      <button type="submit" class="c-action c-action--send" id="btnSend" data-hover>
+        <strong>Изпратете ни запитване — ще се свържем обратно с вас</strong>
+        <span class="go">Изпратете запитването<span class="arr">&#8594;</span></span>
+      </button>
+    </div>
+    <p class="c-note" id="formNote">Плащането се обработва сигурно чрез Stripe. Запитванията отговаряме в рамките на 2 работни дни.</p>
+  </form>
+
+  <!-- Success -->
+  <section class="c-success" id="success">
+    <h2>Благодарим ви — <em>запитването е изпратено</em></h2>
+    <p>Получихме вашата информация и ще се свържем с вас в рамките на 2 работни дни.<br>Ако е спешно, пишете ни директно на info@design-code.bg.</p>
+    <a href="index.html" data-hover>&#8592; Обратно към началната страница</a>
+  </section>
+</main>
+
+<footer class="p-footer">
+  <img src="assets/logo.png" alt="Design-Code">
+  <span>© 2026 Design-Code — Интериорен дизайн</span>
+  <a href="mailto:info@design-code.bg" data-hover>info@design-code.bg</a>
+</footer>
+
+<script>
+/* ============================================================
+   НАСТРОЙКИ — попълнете вашите връзки тук:
+   1) STRIPE_PAYMENT_LINK — създайте Payment Link за 200 € в
+      Stripe Dashboard → Payment Links и поставете URL тук.
+   2) FORM_ENDPOINT — безплатен endpoint от Formspree
+      (formspree.io) или Web3Forms, към който да пристигат
+      запитванията на имейла ви. Ако остане празно, формата
+      отваря имейл с попълнените данни към info@design-code.bg.
+   ============================================================ */
+const STRIPE_PAYMENT_LINK = ""; // напр. "https://buy.stripe.com/xxxxxxxxx"
+const FORM_ENDPOINT = "";       // напр. "https://formspree.io/f/xxxxxxxxx"
+const STUDIO_EMAIL = "info@design-code.bg";
+
+const form = document.getElementById('inquiry');
+const note = document.getElementById('formNote');
+const success = document.getElementById('success');
+
+/* ---- size slider ---- */
+const range = document.getElementById('sizeRange'), out = document.getElementById('sizeOut'), sizeHidden = document.getElementById('size');
+range.addEventListener('input', () => {
+  out.textContent = range.value + ' м²';
+  sizeHidden.value = range.value + ' м²';
+});
+
+/* ---- file upload ---- */
+const drop = document.getElementById('drop'), fileInput = document.getElementById('files'), fileList = document.getElementById('fileList');
+let picked = [];
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+fileInput.addEventListener('change', () => { addFiles(fileInput.files); fileInput.value=''; });
+function addFiles(list){
+  [...list].slice(0, 10 - picked.length).forEach(f => picked.push(f));
+  renderFiles();
+}
+function renderFiles(){
+  fileList.innerHTML = '';
+  picked.forEach((f,i) => {
+    const row = document.createElement('div');
+    row.className = 'f-file';
+    row.innerHTML = `<span>${f.name} · ${(f.size/1024/1024).toFixed(1)} MB</span>`;
+    const btn = document.createElement('button');
+    btn.type='button'; btn.textContent='Премахни'; btn.setAttribute('data-hover','');
+    btn.addEventListener('click', () => { picked.splice(i,1); renderFiles(); });
+    row.appendChild(btn);
+    fileList.appendChild(row);
+  });
+}
+
+/* ---- validation ---- */
+function validate(){
+  let ok = true;
+  form.querySelectorAll('[required]').forEach(el => {
+    const wrap = el.closest('.f-field');
+    const bad = !el.value.trim() || (el.type==='email' && !/^\S+@\S+\.\S+$/.test(el.value));
+    wrap.classList.toggle('error', bad);
+    if (bad) ok = false;
+  });
+  if(!ok){
+    const first = form.querySelector('.f-field.error');
+    first.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  return ok;
+}
+form.querySelectorAll('[required]').forEach(el =>
+  el.addEventListener('input', () => el.closest('.f-field').classList.remove('error')));
+
+function formDataText(){
+  const d = new FormData(form);
+  let lines = [];
+  for (const [k,v] of d.entries()) lines.push(`${k}: ${v}`);
+  lines.push(`files: ${picked.map(f=>f.name).join(', ') || '—'}`);
+  return lines.join('\n');
+}
+
+/* ---- Stripe button ---- */
+document.getElementById('btnStripe').addEventListener('click', () => {
+  if(!validate()) return;
+  if(STRIPE_PAYMENT_LINK){
+    window.location.href = STRIPE_PAYMENT_LINK;
+  } else {
+    note.innerHTML = 'Връзката за плащане още не е активирана — моля, използвайте „Изпратете запитване“<br>или ни пишете на <b style="color:var(--text)">' + STUDIO_EMAIL + '</b>.';
+    note.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+});
+
+/* ---- Send inquiry ---- */
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if(!validate()) return;
+  const btn = document.getElementById('btnSend');
+  btn.querySelector('.go').firstChild.textContent = 'Изпраща се… ';
+
+  if(FORM_ENDPOINT){
+    try{
+      const d = new FormData(form);
+      picked.forEach(f => d.append('files', f, f.name));
+      const r = await fetch(FORM_ENDPOINT, {method:'POST', body:d, headers:{'Accept':'application/json'}});
+      if(r.ok){ showSuccess(); return; }
+      throw new Error();
+    }catch(_){
+      btn.querySelector('.go').firstChild.textContent = 'Грешка — опитайте отново ';
+      return;
+    }
+  }
+  /* fallback: mailto с попълнените данни */
+  const subject = encodeURIComponent('Запитване за интериорен дизайн — ' + document.getElementById('names').value);
+  const body = encodeURIComponent(formDataText() + '\n\n(Прикачените снимки/чертежи моля добавете ръчно към този имейл.)');
+  window.location.href = `mailto:${STUDIO_EMAIL}?subject=${subject}&body=${body}`;
+  showSuccess();
+});
+
+function showSuccess(){
+  form.style.display = 'none';
+  success.classList.add('show');
+  scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+<script src="project.js"></script>
+</body>
+</html>
